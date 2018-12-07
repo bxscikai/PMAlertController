@@ -8,6 +8,10 @@
 
 import UIKit
 
+public protocol PMAlertDelegate: class {
+    func alertDidDismiss()
+}
+
 @objc public enum PMAlertControllerStyle : Int {
     case alert // The alert will adopt a width of 270 (like UIAlertController).
     case walkthrough //The alert will adopt a width of the screen size minus 18 (from the left and right side). This style is designed to accommodate localization, push notifications and more.
@@ -35,6 +39,8 @@ import UIKit
     @IBOutlet weak open var alertActionStackViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak open var alertActionStackViewBottomConstraint: NSLayoutConstraint!
     
+    open weak var alertDelegate: PMAlertDelegate?
+    
     open var ALERT_STACK_VIEW_HEIGHT : CGFloat = UIScreen.main.bounds.height < 568.0 ? 40 : 62 //if iphone 4 the stack_view_height is 40, else 62
     var animator : UIDynamicAnimator?
     
@@ -56,6 +62,7 @@ import UIKit
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.post(name: NSNotification.Name.init("AlertDismissed"), object: nil)
+        alertDelegate?.alertDidDismiss()
     }
     
     
