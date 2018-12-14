@@ -50,6 +50,7 @@ public protocol PMAlertDelegate: class {
     
     open var gravityDismissAnimation = true
     open var dismissWithBackgroudTouch = false // enable touch background to dismiss. Off by default.
+    open var hasImageToShow = false
     
     //MARK: - Lifecycle
     
@@ -95,6 +96,9 @@ public protocol PMAlertDelegate: class {
         alertTitle.text = title
         alertDescription.text = description
         
+        if image != nil {
+            hasImageToShow = true
+        }
         
         //if alert width = 270, else width = screen width - 36
         style == .alert ? (alertViewWidthConstraint.constant = 270) : (alertViewWidthConstraint.constant = UIScreen.main.bounds.width - 36)
