@@ -9,7 +9,9 @@
 import UIKit
 
 public protocol PMAlertDelegate: class {
-    func alertDidDismiss()
+    func alertDidDismiss(alert: PMAlertController)
+    func alertWillDismiss(alert: PMAlertController)
+    func alertWillAppear(alert: PMAlertController)
 }
 
 @objc public enum PMAlertControllerStyle : Int {
@@ -51,6 +53,12 @@ public protocol PMAlertDelegate: class {
     
     //MARK: - Lifecycle
     
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        alertDelegate?.alertWillAppear(alert: self)
+    }
+    
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -62,7 +70,12 @@ public protocol PMAlertDelegate: class {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.post(name: NSNotification.Name.init("AlertDismissed"), object: nil)
-        alertDelegate?.alertDidDismiss()
+        alertDelegate?.alertDidDismiss(alert: self)
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        alertDelegate?.alertWillDismiss(alert: self)
     }
     
     
