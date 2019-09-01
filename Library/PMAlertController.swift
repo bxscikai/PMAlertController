@@ -62,14 +62,14 @@ public protocol PMAlertDelegate: class {
     
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.post(name: NSNotification.Name.init("AlertDismissed"), object: nil)
         alertDelegate?.alertDidDismiss(alert: self)
     }
@@ -139,7 +139,7 @@ public protocol PMAlertDelegate: class {
         self.animateDismissWithGravity(.cancel)
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     //MARK: - Text Fields
     @objc open func addTextField(_ configuration: (_ textField: UITextField?) -> Void){
         let textField = UITextField()
@@ -223,7 +223,7 @@ public protocol PMAlertDelegate: class {
         keyboardHasBeenShown = true
         
         guard let userInfo = (notification as NSNotification).userInfo else {return}
-        guard let endKeyBoardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.minY else {return}
+        guard let endKeyBoardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.minY else {return}
         
         if tempFrameOrigin == nil {
             tempFrameOrigin = alertView.frame.origin
