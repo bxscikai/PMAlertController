@@ -47,8 +47,9 @@ import UIKit
     
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
@@ -113,7 +114,7 @@ import UIKit
         self.animateDismissWithGravity(.cancel)
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     //MARK: - Text Fields
     @objc open func addTextField(_ configuration: (_ textField: UITextField?) -> Void){
         let textField = UITextField()
